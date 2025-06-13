@@ -6,7 +6,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const { errorHandler } = require('./middleware/errorHandler');
 const routes = require('./routes');
-const { redirectToUrl } = require('./controllers/urlController'); // ✅ Add this
+const { redirectToUrl , getAnalytics } = require('./controllers/urlController'); // ✅ Add this
 
 const app = express();
 
@@ -26,6 +26,7 @@ app.use(limiter);
 // Routes
 app.use('/api', routes);
 app.get('/:code', redirectToUrl);
+app.get('/:code/analytics', getAnalytics);
 
 // Error handling
 app.use(errorHandler);

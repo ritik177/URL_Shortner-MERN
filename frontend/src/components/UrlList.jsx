@@ -62,14 +62,32 @@ const UrlList = ({ urls }) => {
 
   const renderAnalytics = (analytics) => {
     const deviceData = Object.entries(analytics.deviceTypes).map(([name, value]) => ({
-      name,
+      name: name.charAt(0).toUpperCase() + name.slice(1),
       value,
+      label: `${name.charAt(0).toUpperCase() + name.slice(1)}: ${value}`
     }));
 
     const timeSeriesData = Object.entries(analytics.visitsByDay).map(([date, count]) => ({
       date,
       visits: count,
+      label: `${date}: ${count} visits`
     }));
+
+    const CustomTooltip = ({ active, payload, label }) => {
+      if (active && payload && payload.length) {
+        return (
+          <div style={{
+            backgroundColor: 'white',
+            padding: '10px',
+            border: '1px solid #ccc',
+            borderRadius: '4px'
+          }}>
+            <p style={{ margin: 0 }}>{payload[0].payload.label}</p>
+          </div>
+        );
+      }
+      return null;
+    };
 
     return (
       <Grid container spacing={3}>
@@ -86,13 +104,13 @@ const UrlList = ({ urls }) => {
                 cx="50%"
                 cy="50%"
                 outerRadius={80}
-                label
+                label={({ name, value }) => `${name}: ${value}`}
               >
                 {deviceData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip />
+              <RechartsTooltip content={<CustomTooltip />} />
               <Legend />
             </PieChart>
           </ResponsiveContainer>
@@ -106,7 +124,7 @@ const UrlList = ({ urls }) => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis />
-              <Tooltip />
+              <RechartsTooltip content={<CustomTooltip />} />
               <Legend />
               <Bar dataKey="visits" fill="#8884d8" />
             </BarChart>

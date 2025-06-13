@@ -13,6 +13,7 @@ import {
   Chip,
   Collapse,
   Grid,
+  Tooltip,
 } from '@mui/material';
 import {
   KeyboardArrowDown,
@@ -28,7 +29,7 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
+  Tooltip as RechartsTooltip,
   Legend,
   ResponsiveContainer,
 } from 'recharts';
@@ -37,9 +38,22 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const UrlList = ({ urls }) => {
   const [expandedUrl, setExpandedUrl] = useState(null);
+  const [copyTooltip, setCopyTooltip] = useState('');
 
-  const handleCopy = (url) => {
+  const handleCopy = (url, type) => {
     navigator.clipboard.writeText(url);
+    setCopyTooltip(`${type} copied!`);
+    setTimeout(() => setCopyTooltip(''), 2000);
+  };
+
+  const handleShortUrlClick = (shortUrl) => {
+    // Open in new tab
+    window.open(shortUrl, '_blank');
+  };
+
+  const truncateUrl = (url, maxLength = 30) => {
+    if (url.length <= maxLength) return url;
+    return url.substring(0, maxLength) + '...';
   };
 
   const formatDate = (date) => {
@@ -158,16 +172,43 @@ const UrlList = ({ urls }) => {
                 </TableCell>
                 <TableCell>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    {url.shortUrl}
-                    <IconButton
-                      size="small"
-                      onClick={() => handleCopy(url.shortUrl)}
+                    <Typography
+                      sx={{ 
+                        cursor: 'pointer',
+                        color: 'primary.main',
+                        '&:hover': { textDecoration: 'underline' }
+                      }}
+                      onClick={() => handleShortUrlClick(url.shortUrl)}
                     >
-                      <ContentCopy fontSize="small" />
-                    </IconButton>
+                      {url.shortUrl}
+                    </Typography>
+                    <Tooltip title={copyTooltip || "Copy short URL"}>
+                      <IconButton
+                        size="small"
+                        onClick={() => handleCopy(url.shortUrl, 'Short URL')}
+                      >
+                        <ContentCopy fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
                   </Box>
                 </TableCell>
-                <TableCell>{url.originalUrl}</TableCell>
+                <TableCell>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Tooltip title={url.originalUrl}>
+                      <Typography noWrap sx={{ maxWidth: 300 }}>
+                        {truncateUrl(url.originalUrl)}
+                      </Typography>
+                    </Tooltip>
+                    <Tooltip title={copyTooltip || "Copy original URL"}>
+                      <IconButton
+                        size="small"
+                        onClick={() => handleCopy(url.originalUrl, 'Original URL')}
+                      >
+                        <ContentCopy fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
+                </TableCell>
                 <TableCell>
                   <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
                     {url.tags.map((tag) => (

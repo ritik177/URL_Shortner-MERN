@@ -17,6 +17,6 @@ router.get('/tags/:tag', urlController.getUrlsByTag);
 router.get('/:code/analytics', urlController.getAnalytics);
 
 // Redirect to original URL
-router.get('/:code', urlController.redirectToUrl);
+// router.get('/:code', urlController.redirectToUrl);
 
 module.exports = router; 

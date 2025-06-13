@@ -54,10 +54,10 @@ npm install
 
 3. Create a `.env` file in the backend directory:
 ```env
-PORT=5000
+PORT=3000
 MONGODB_URI=mongodb://localhost:27017/url-shortener
-BASE_URL=http://localhost:5000
-FRONTEND_URL=http://localhost:3000
+BASE_URL=http://localhost:3000
+FRONTEND_URL=http://localhost:5173
 ```
 
 4. Start the backend server:
@@ -75,7 +75,7 @@ npm install
 
 2. Create a `.env` file in the frontend directory:
 ```env
-REACT_APP_API_URL=http://localhost:5000/api
+REACT_APP_API_URL=http://localhost:3000/api
 ```
 
 3. Start the frontend development server:
@@ -84,14 +84,14 @@ npm start
 ```
 
 The application should now be running at:
-- Frontend: http://localhost:3000
-- Backend: http://localhost:5000
+- Frontend: http://localhost:5173
+- Backend: http://localhost:3000
 
 ## API Documentation
 
 ### Base URL
 ```
-http://localhost:5000/api
+http://localhost:3000/api
 ```
 
 ### Endpoints
@@ -116,7 +116,7 @@ Response:
 {
   "success": true,
   "data": {
-    "shortUrl": "http://localhost:5000/abc123",
+    "shortUrl": "http://localhost:3000/abc123",
     "originalUrl": "https://example.com/very/long/url",
     "expiryDate": "2024-03-21T12:00:00.000Z"
   }
@@ -135,7 +135,7 @@ Response:
   "data": [
     {
       "shortCode": "abc123",
-      "shortUrl": "http://localhost:5000/abc123",
+      "shortUrl": "http://localhost:3000/abc123",
       "originalUrl": "https://example.com/very/long/url",
       "tags": ["example", "test"],
       "analytics": {
@@ -277,13 +277,13 @@ Response:
 ```env
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/url-shortener
-BASE_URL=http://localhost:5000
-FRONTEND_URL=http://localhost:3000
+BASE_URL=http://localhost:3000
+FRONTEND_URL=http://localhost:5173
 ```
 
 ### Frontend (.env)
 ```env
-REACT_APP_API_URL=http://localhost:5000/api
+REACT_APP_API_URL=http://localhost:3000/api
 ```
 
 ## Contributing
